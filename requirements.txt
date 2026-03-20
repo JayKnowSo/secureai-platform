@@ -1,0 +1,75 @@
+# ── SECUREAI PLATFORM — DEPENDENCIES ────────────────────────────────
+# Install all dependencies with:
+#   pip install -r requirements.txt
+#
+# All versions are pinned for reproducibility
+# Same versions run locally, in CI, and in production
+# This is the same discipline as digest-pinning Docker images
+
+# ── CLI FRAMEWORK ────────────────────────────────────────────────────
+# click = the industry standard Python CLI framework
+# Powers all secureai commands: scan, analyze, report
+# Used by Flask, Black, and hundreds of major Python tools
+click==8.1.7
+
+# ── AI ANALYSIS ──────────────────────────────────────────────────────
+# anthropic = official Anthropic Python SDK
+# Powers: secureai analyze cve <CVE-ID>
+# Sends CVE data to Claude API, returns security analysis
+# Phase 1: mocked for free development
+# Phase 2+: real API calls with your ANTHROPIC_API_KEY
+anthropic==0.25.0
+
+# ── TERMINAL OUTPUT ──────────────────────────────────────────────────
+# rich = beautiful terminal formatting library
+# Powers: colored output, tables, progress bars, panels
+# Makes secureai output look professional instead of plain text
+# Used by pip, pytest, and many elite Python tools
+rich==13.7.0
+
+# ── FILE PARSING ─────────────────────────────────────────────────────
+# pyyaml = YAML file parser
+# Powers: docker-compose.yml scanning
+# Reads your compose file into a Python dictionary for analysis
+pyyaml==6.0.1
+
+# ── HTTP REQUESTS ────────────────────────────────────────────────────
+# httpx = modern async HTTP client
+# Powers: NVD API calls (Phase 3 CVE monitoring)
+# Also used by FastAPI internally — already familiar
+httpx==0.27.0
+
+# ── AWS SDK ──────────────────────────────────────────────────────────
+# boto3 = official AWS Python SDK
+# Powers: Phase 2 AWS infrastructure auditor
+# IAM auditing, S3 scanning, security group analysis
+# Install now so Phase 2 has zero setup friction
+boto3==1.34.0
+
+# ── REPORT GENERATION ────────────────────────────────────────────────
+# jinja2 = Python HTML templating engine
+# Powers: secureai report — generates professional HTML reports
+# Same engine used by Flask and Django for web templates
+jinja2==3.1.3
+
+# ── TESTING ──────────────────────────────────────────────────────────
+# pytest = the Python testing framework
+# Runs all secureai tests: pytest tests/
+pytest==8.1.0
+
+# pytest-env = sets environment variables during pytest runs
+# Prevents tests from needing real API keys
+# Same pattern used in your FastAPI project
+pytest-env==1.1.3
+
+# ── CODE QUALITY ─────────────────────────────────────────────────────
+# ruff = extremely fast Python linter and formatter
+# Catches code quality issues before they reach GitHub
+# Replaces flake8, isort, and parts of pylint in one tool
+ruff==0.3.0
+
+# ── SECURITY SCANNING ────────────────────────────────────────────────
+# bandit = Python security linter
+# Scans your own code for security vulnerabilities
+# Same tool used in your FastAPI project pre-commit hooks
+bandit==1.7.7

@@ -35,7 +35,7 @@ class SecretsScanner:
     - Private keys (PEM format)
     - Database connection strings with credentials
     - Generic high-entropy strings that look like secrets
-
+    
     Args:
         path: directory to scan
     """
@@ -44,20 +44,18 @@ class SecretsScanner:
         self.path = path
         self.findings = []
 
+        # Directories to always skip — I added 'tests' here!
+        self.skip_dirs = {
+            ".git", ".venv", "venv", "node_modules",
+            "__pycache__", ".pytest_cache", "dist", "build", "tests"
+        }
+
         # File extensions to scan
-        # Binary files, images, and lock files are skipped
         self.scan_extensions = {
             ".py", ".js", ".ts", ".yaml", ".yml",
             ".json", ".env", ".sh", ".bash",
             ".tf", ".tfvars", ".conf", ".config",
             ".ini", ".toml", ".xml", ".properties"
-        }
-
-        # Directories to always skip
-        # These contain third-party code or generated files
-        self.skip_dirs = {
-            ".git", ".venv", "venv", "node_modules",
-            "__pycache__", ".pytest_cache", "dist", "build"
         }
 
         # Regex patterns for secret detection

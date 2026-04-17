@@ -19,7 +19,6 @@ The report includes:
 
 import os
 from datetime import datetime
-from secureai.utils.output import console
 
 
 class HTMLReporter:

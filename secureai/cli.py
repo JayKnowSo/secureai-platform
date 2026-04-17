@@ -2,7 +2,8 @@
 SecureAI Platform — CLI Entry Point
 ====================================
 Phase 4, Day 5: AWS Cloud-Native Integration
-Engineer: Jemel Padilla (JayKnowSo)
+All commands are defined here using Click.
+Click is the industry standard Python CLI framework.
 """
 
 import click

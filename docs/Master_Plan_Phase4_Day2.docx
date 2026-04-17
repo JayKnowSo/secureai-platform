@@ -1,0 +1,114 @@
+# Master Plan → Phase 4 Day 2
+## Everything Done This Session Series
+
+### Master Plan Review & Patch
+Uploaded **Cloud_Security_Masterclass_Upgraded_2026.docx**. Graded **A−/92**. Five execution gaps identified and patched directly into the document:  
+- CLF-C02 modules 2/3/5 unscheduled  
+- no working resume before Week 4  
+- STAR stories starting too late  
+- SAST/DAST unscheduled  
+- Falco contribution cold start  
+
+**Salary floor confirmed upgraded to $135K.** Document saved as **v2**.
+
+### Phase 2 Day 5 — CloudTrail + Detective Controls
+- Created S3 bucket for CloudTrail logs  
+- Attached CloudTrail service principal bucket policy  
+- Created multi-region trail **jayknowso-audit-trail** with log file validation  
+- Created CloudWatch log group **/aws/cloudtrail/jayknowso-audit**  
+- Created IAM role **jayknowso-cloudtrail-cloudwatch-role** with least-privilege write policy  
+- Wired CloudTrail to stream logs to CloudWatch  
+- Created metric filter for root account API calls  
+- Created alarm **jayknowso-root-account-usage-alarm** (threshold=1, period=300s)  
+- 5-test CLI proof documented  
+- ADR-007 written and committed  
+**Phase 2 CLOSED**
+
+### Phase 3 Day 1 — SHA Pinning + Semgrep SAST
+- Fetched SHA hashes for all 5 GitHub Actions  
+- Replaced all floating tags with immutable commit SHAs  
+- Added Semgrep SAST job (p/python, p/secrets, p/owasp-top-ten)  
+- Pipeline order: **test → sast → trivy-scan**
+
+### Phase 3 Day 2 — Gitleaks Secret Scanning
+- Fetched Gitleaks action SHA  
+- Added Gitleaks to sast job with **fetch-depth: 0**  
+- Proved detection locally: **302 hits** on fake AWS key  
+- Repo confirmed clean across **63 commits**  
+- Pipeline green
+
+### Phase 3 Day 3 — SBOM + Grype
+- Installed Syft via snap  
+- Discovered Chosen Crew node_modules inside repo — added **chosen-crew/** to .gitignore  
+- Generated CycloneDX SBOM: **510 components** after exclusion  
+- Installed Grype via snap  
+- Scan result: **71 findings**, 0 CRITICAL, 19 High, 37 Medium, 15 Low  
+- All High findings were system binaries, not pip dependencies  
+- Added Syft + Grype as new **sbom** job in pipeline  
+- Pipeline order: **test → sast → sbom → trivy-scan**
+
+### Phase 3 Day 4 — Cosign Image Signing
+- Installed Cosign v3.0.6  
+- Generated keypair: **cosign.key** (gitignored, stored as GitHub secret) + **cosign.pub** (committed)  
+- Fought through 3 Cosign v3 breaking changes across **10 pipeline runs**:  
+  - `--no-tlog-upload` removed  
+  - `--tlog-upload=false` conflicts with signing config  
+  - Tag-based signing tries Docker Hub  
+- **Final solution**: cosign sign-blob against image tarball (**docker save → /tmp/image.tar**)  
+- Pipeline green on **run #21**
+
+### Phase 3 Day 5 — OPA/Rego Policy Gate
+- Installed OPA v1.15.2  
+- Wrote **container_policy.rego** in Rego v1 syntax  
+- Tested locally: root denied, UID 1001 allowed  
+- Wrote **check_dockerfile.py** to extract USER from Dockerfile and run OPA eval  
+- Dockerfile confirmed compliant: **USER appuser (UID 1001)**  
+- Added OPA gate to sast job after Gitleaks  
+- Fixed OPA binary not in runner PATH by adding curl install step  
+- Pipeline green
+
+### Phase 3 Day 6 — DAST via OWASP ZAP
+- Started app stack with **docker compose up -d**  
+- Pulled **ghcr.io/zaproxy/zaproxy:stable**  
+- Ran baseline scan: **0 failures, 2 warnings, 65 passes**  
+- Warnings: missing Anti-clickjacking + CORP headers (**Phase 6 fix**)  
+- Added **dast** job to pipeline between sbom and trivy-scan  
+- Pipeline order: **test → sast → sbom → dast → trivy-scan**  
+- Pipeline green
+
+### Phase 3 Day 7 — ADRs + 5-Test Proof + Phase 3 Close
+- ADR-008: CI/CD hardening strategy  
+- ADR-009: Supply chain security (SBOM + Cosign)  
+- ADR-010: DAST integration  
+- **test_phase3_checkpoint.py**: 5 passing tests  
+- Fixed pytest import missing, fixed OPA skip when not in PATH  
+**Phase 3 CLOSED — 10 ADRs total**
+
+### Phase 4 Day 1 — Terraform + Checkov Pre-commit
+- Installed Terraform **1.14.8** via snap  
+- Installed Checkov **3.2.521** via pip  
+- Wrote **terraform/main.tf**: S3 bucket with encryption, versioning, logging, public access block  
+- Checkov scan: **12 passing, 0 failing** (3 skipped with rationale in .checkov.yaml)  
+- **terraform init → plan → apply → destroy** verified against real AWS  
+- 5 resources created and destroyed, **$0 cost**  
+- Installed pre-commit + Checkov as pre-commit hook  
+- Pipeline green (**#27**)
+
+### Phase 4 Day 2 — Checkov CI Pipeline Gate (solo with Gemini)
+- Checkov added as **blocking gate** in CI pipeline  
+- **100% compliance achieved: 32/32 checks passing**  
+- **57 tests total passing**  
+- Installed **pipx** for isolated tool environments  
+- Pipeline green
+
+### LinkedIn Posts Published
+- Phase 3 Days 1–3: SHA pinning, Semgrep, Gitleaks, SBOM  
+- **Phase 3 Complete**: "piece by piece, layer by layer" — music engineer angle
+
+### Repo Rename + README Rewrite
+Planned for **Phase 6 portfolio polish** only. Options:  
+- **secure-cloud-api**  
+- **hardened-fastapi-platform**  
+- **cloud-security-lab**  
+
+**README will lead with security story**: 53 tests, 14 ADRs, 6 phases, zero CRITICAL CVEs. **Not before Phase 6**.

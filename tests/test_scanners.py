@@ -9,9 +9,6 @@ Three categories:
 3. Edge cases handled — no crashes on bad input
 """
 
-import os
-import pytest
-import tempfile
 from secureai.scanners.docker import DockerScanner
 from secureai.scanners.secrets import SecretsScanner
 

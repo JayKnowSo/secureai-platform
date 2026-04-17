@@ -1,0 +1,9 @@
+- rule: Shell Run in SecureAI Container
+  desc: Detects a shell launched inside the production application container
+  condition: >
+    container.name = "secureai-platform" and 
+    proc.name in (bash, sh, zsh, ksh) and 
+    proc.pname != "python3"
+  output: "⚠️ CRITICAL: Shell spawned in secureai-platform (user=%user.name, proc=%proc.name, parent=%proc.pname)"
+  priority: CRITICAL
+  tags: [mitre_t1059_004, runtime_security]

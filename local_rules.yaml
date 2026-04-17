@@ -1,0 +1,5 @@
+- rule: Shell Prohibited in SecureAI Container
+  desc: Detects a shell being opened inside the SecureAI platform container
+  condition: container.name == "secureai-platform" and proc.name in (bash, sh) and container.id != host
+  output: "🚨 ALERT: Unauthorized Shell opened in %container.name (user=%user.name cmd=%proc.cmdline)"
+  priority: CRITICAL

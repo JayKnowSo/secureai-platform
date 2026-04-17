@@ -12,6 +12,8 @@ from botocore.exceptions import ClientError
 from rich.console import Console
 from rich.panel import Panel
 from rich.text import Text
+from secureai.scanners.docker import DockerScanner
+from secureai.scanners.secrets import SecretsScanner
 
 # Rich console — handles all colored terminal output
 console = Console()
@@ -52,13 +54,13 @@ def scan():
     """Scan your infrastructure for security issues."""
     pass
 
+
 # ── SCAN DOCKER ──────────────────────────────────────────────────────
 @scan.command()
 @click.option("--path", default="./", help="Path to scan.", show_default=True)
 @click.option("--severity", default="HIGH", type=click.Choice(["CRITICAL", "HIGH", "MEDIUM", "LOW"]), show_default=True)
 def docker(path, severity):
     """Scan Dockerfile and docker-compose.yml for security issues."""
-    from secureai.scanners.docker import DockerScanner
     console.print(Panel(Text("SecureAI — Docker Scanner", style="bold blue"), subtitle=f"Scanning: {path}"))
 
     scanner = DockerScanner(path=path, severity_threshold=severity)
@@ -76,7 +78,6 @@ def docker(path, severity):
 @click.option("--path", default="./", help="Path to scan for secrets.", show_default=True)
 def secrets(path):
     """Scan codebase for hardcoded credentials."""
-    from secureai.scanners.secrets import SecretsScanner
     console.print(Panel(Text("SecureAI — Secrets Scanner", style="bold red"), subtitle=f"Scanning: {path}"))
 
     scanner = SecretsScanner(path=path)
@@ -121,18 +122,18 @@ def cve(cve_id, stack):
     result = analyzer.analyze(cve_id)
     console.print(result)
 
-# ── REPORT COMMAND ───────────────────────────────────────────────────
+# --- REPORT COMMAND ---
 @cli.command()
 @click.option("--path", default="./", help="Path to scan.", show_default=True)
 @click.option("--output", default="reports/", help="Output directory.", show_default=True)
 def report(path, output):
     """Generate a professional HTML security report."""
-    from secureai.scanners.docker import DockerScanner
     from secureai.scanners.secrets import SecretsScanner
     from secureai.reporters.html import HTMLReporter
 
     console.print(Panel(Text("SecureAI — Security Report Generator", style="bold green")))
 
+    # Fixed: Explicitly using the arguments passed into the function
     docker_findings = DockerScanner(path=path).scan()
     secrets_findings = SecretsScanner(path=path).scan()
     all_findings = docker_findings + secrets_findings

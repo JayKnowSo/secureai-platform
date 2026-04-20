@@ -146,3 +146,22 @@ def report(path, output):
 # ── ENTRY POINT ──────────────────────────────────────────────────────
 if __name__ == "__main__":
     cli()
+
+# ── SCAN LLM ─────────────────────────────────────────────────────────
+@scan.command()
+@click.option("--path", default="./", help="Path to scan for OWASP LLM Top 10 issues.", show_default=True)
+def llm(path):
+    """Scan Python codebase for OWASP LLM Top 10 vulnerabilities."""
+    from secureai.scanners.llm_scanner import LLMScanner
+
+    console.print(Panel(Text("SecureAI — OWASP LLM Top 10 Scanner", style="bold magenta"), subtitle=f"Scanning: {path}"))
+
+    scanner = LLMScanner(path=path)
+    findings = scanner.scan()
+
+    if not findings:
+        console.print("[bold green]✓ No LLM vulnerabilities detected.[/bold green]")
+        return
+
+    from secureai.utils.output import display_findings
+    display_findings(findings)

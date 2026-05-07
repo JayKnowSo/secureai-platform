@@ -1,5 +1,10 @@
 # SecureAI Platform
 
+![CI](https://github.com/JayKnowSo/secureai-platform/actions/workflows/security.yml/badge.svg)
+![Tests](https://img.shields.io/badge/tests-28%20passing-brightgreen)
+![OWASP LLM](https://img.shields.io/badge/OWASP%20LLM-Top%2010%20Coverage-blue)
+![License](https://img.shields.io/badge/license-MIT-blue)
+
 
 A command-line security auditing platform combining static infrastructure scanning with AI-powered vulnerability analysis. Built for engineers who need context-aware findings — not just a list of what broke.
 

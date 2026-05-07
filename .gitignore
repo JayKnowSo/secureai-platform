@@ -50,4 +50,13 @@ reports/
 # ── OPERATING SYSTEM ────────────────────────────────────────────────
 # macOS creates .DS_Store files in every folder it opens
 # These are invisible metadata files — pure noise in a repo
-.DS_Store
+.DS_Storecosign.key
+
+# Cosign signing keys - NEVER commit private keys
+cosign.key
+cosign.pub
+*.sig
+*.bundle
+
+# SBOM artifacts - attach to GitHub releases, not committed to repo
+*-sbom.json

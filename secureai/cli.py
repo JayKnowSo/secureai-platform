@@ -165,3 +165,53 @@ def llm(path):
 
     from secureai.utils.output import display_findings
     display_findings(findings)
+
+# ── SBOM COMMAND ─────────────────────────────────────────────────────
+@cli.command()
+@click.option("--path", required=True, type=click.Path(exists=True), help="Path to project root.")
+@click.option("--format", "fmt", default="cyclonedx-json", type=click.Choice(["cyclonedx-json", "cyclonedx-xml"]), show_default=True)
+def sbom(path, fmt):
+    """Generate a CycloneDX Software Bill of Materials for a project."""
+    import json
+    from pathlib import Path
+
+    console.print(Panel(Text("SecureAI — SBOM Generator", style="bold cyan"), subtitle=f"Target: {path} | Format: {fmt}"))
+
+    req_file = Path(path) / "requirements.txt"
+    components = []
+
+    if req_file.exists():
+        for line in req_file.read_text().splitlines():
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            if "==" in line:
+                name, version = line.split("==", 1)
+            else:
+                name, version = line, "unknown"
+            components.append({"name": name.strip(), "version": version.strip()})
+
+    if not components:
+        console.print("[yellow]Warning:[/yellow] No components found in requirements.txt")
+
+    bom_data = {
+        "bomFormat": "CycloneDX",
+        "specVersion": "1.4",
+        "version": 1,
+        "components": [
+            {"type": "library", "name": c["name"], "version": c["version"]}
+            for c in components
+        ]
+    }
+
+    if fmt == "cyclonedx-json":
+        output = json.dumps(bom_data, indent=2)
+        console.print(output)
+    else:
+        lines = ['<?xml version="1.0" ?>', '<bom xmlns="http://cyclonedx.org/schema/bom/1.4">', '  <components>']
+        for c in components:
+            lines.append(f'    <component type="library"><name>{c["name"]}</name><version>{c["version"]}</version></component>')
+        lines += ['  </components>', '</bom>']
+        console.print("\n".join(lines))
+
+    console.print(f"\n[bold green]✓ SBOM generated — {len(components)} components.[/bold green]")

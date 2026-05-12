@@ -1,75 +1,77 @@
-# ── SECUREAI PLATFORM — DEPENDENCIES ────────────────────────────────
-# Install all dependencies with:
-#   pip install -r requirements.txt
-#
-# All versions are pinned for reproducibility
-# Same versions run locally, in CI, and in production
-# This is the same discipline as digest-pinning Docker images
-
-# ── CLI FRAMEWORK ────────────────────────────────────────────────────
-# click = the industry standard Python CLI framework
-# Powers all secureai commands: scan, analyze, report
-# Used by Flask, Black, and hundreds of major Python tools
-click==8.1.7
-
-# ── AI ANALYSIS ──────────────────────────────────────────────────────
-# anthropic = official Anthropic Python SDK
-# Powers: secureai analyze cve <CVE-ID>
-# Sends CVE data to Claude API, returns security analysis
-# Phase 1: mocked for free development
-# Phase 2+: real API calls with your ANTHROPIC_API_KEY
+annotated-doc==0.0.4
+annotated-types==0.7.0
 anthropic==0.25.0
-
-# ── TERMINAL OUTPUT ──────────────────────────────────────────────────
-# rich = beautiful terminal formatting library
-# Powers: colored output, tables, progress bars, panels
-# Makes secureai output look professional instead of plain text
-# Used by pip, pytest, and many elite Python tools
-rich==13.7.0
-
-# ── FILE PARSING ─────────────────────────────────────────────────────
-# pyyaml = YAML file parser
-# Powers: docker-compose.yml scanning
-# Reads your compose file into a Python dictionary for analysis
-pyyaml==6.0.1
-
-# ── HTTP REQUESTS ────────────────────────────────────────────────────
-# httpx = modern async HTTP client
-# Powers: NVD API calls (Phase 3 CVE monitoring)
-# Also used by FastAPI internally — already familiar
-httpx==0.27.0
-
-# ── AWS SDK ──────────────────────────────────────────────────────────
-# boto3 = official AWS Python SDK
-# Powers: Phase 2 AWS infrastructure auditor
-# IAM auditing, S3 scanning, security group analysis
-# Install now so Phase 2 has zero setup friction
-boto3==1.34.0
-
-# ── REPORT GENERATION ────────────────────────────────────────────────
-# jinja2 = Python HTML templating engine
-# Powers: secureai report — generates professional HTML reports
-# Same engine used by Flask and Django for web templates
-jinja2==3.1.3
-
-# ── TESTING ──────────────────────────────────────────────────────────
-# pytest = the Python testing framework
-# Runs all secureai tests: pytest tests/
-pytest==8.1.0
-
-# pytest-env = sets environment variables during pytest runs
-# Prevents tests from needing real API keys
-# Same pattern used in your FastAPI project
-pytest-env==1.1.3
-
-# ── CODE QUALITY ─────────────────────────────────────────────────────
-# ruff = extremely fast Python linter and formatter
-# Catches code quality issues before they reach GitHub
-# Replaces flake8, isort, and parts of pylint in one tool
-ruff==0.3.0
-
-# ── SECURITY SCANNING ────────────────────────────────────────────────
-# bandit = Python security linter
-# Scans your own code for security vulnerabilities
-# Same tool used in your FastAPI project pre-commit hooks
+anyio==4.12.1
+arrow==1.4.0
+attrs==26.1.0
 bandit==1.7.7
+boolean.py==5.0
+boto3==1.34.0
+botocore==1.34.162
+certifi==2026.2.25
+chardet==5.2.0
+click==8.1.7
+coverage==7.13.5
+cyclonedx-bom==7.3.0
+cyclonedx-python-lib==11.7.0
+defusedxml==0.7.1
+distro==1.9.0
+filelock==3.25.2
+fqdn==1.5.1
+fsspec==2026.2.0
+h11==0.16.0
+hf-xet==1.4.2
+httpcore==1.0.9
+httpx==0.27.0
+huggingface_hub==1.7.1
+idna==3.11
+iniconfig==2.3.0
+isoduration==20.11.0
+Jinja2==3.1.3
+jmespath==1.1.0
+jsonpointer==3.1.1
+jsonschema==4.26.0
+jsonschema-specifications==2025.9.1
+lark==1.3.1
+license-expression==30.4.4
+lxml==6.1.0
+markdown-it-py==4.0.0
+MarkupSafe==3.0.3
+mdurl==0.1.2
+packageurl-python==0.17.6
+packaging==26.0
+pip-requirements-parser==32.0.1
+pluggy==1.6.0
+py-serializable==2.1.0
+pydantic==2.12.5
+pydantic_core==2.41.5
+Pygments==2.19.2
+pyparsing==3.3.2
+pytest==8.3.0
+pytest-cov==7.1.0
+pytest-env==1.1.3
+python-dateutil==2.9.0.post0
+PyYAML==6.0.1
+referencing==0.37.0
+rfc3339-validator==0.1.4
+rfc3986-validator==0.1.1
+rfc3987-syntax==1.1.0
+rich==13.7.0
+rpds-py==0.30.0
+ruff==0.3.0
+s3transfer==0.9.0
+-e git+ssh://git@github.com/JayKnowSo/secureai-platform.git@9683319e0e96f571d592710875f8dc4e3aa98b81#egg=secureai_platform
+shellingham==1.5.4
+six==1.17.0
+sniffio==1.3.1
+sortedcontainers==2.4.0
+stevedore==5.7.0
+tokenizers==0.22.2
+tqdm==4.67.3
+typer==0.23.1
+typing-inspection==0.4.2
+typing_extensions==4.15.0
+tzdata==2026.2
+uri-template==1.3.0
+urllib3==2.6.3
+webcolors==25.10.0

@@ -143,10 +143,6 @@ def report(path, output):
 
     console.print(f"[bold green]✓ Report generated:[/bold green] {report_path}")
 
-# ── ENTRY POINT ──────────────────────────────────────────────────────
-if __name__ == "__main__":
-    cli()
-
 # ── SCAN LLM ─────────────────────────────────────────────────────────
 @scan.command()
 @click.option("--path", default="./", help="Path to scan for OWASP LLM Top 10 issues.", show_default=True)
@@ -215,3 +211,7 @@ def sbom(path, fmt):
         console.print("\n".join(lines))
 
     console.print(f"\n[bold green]✓ SBOM generated — {len(components)} components.[/bold green]")
+
+
+if __name__ == "__main__":
+    cli()

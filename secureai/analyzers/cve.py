@@ -35,13 +35,12 @@ class CVEAnalyzer:
                    provides context about your specific stack
     """
 
-    def __init__(self, stack_path: str = None):
+    def __init__(self, stack_path: str = None, api_key: str = None):
         self.stack_path = stack_path
         self.stack_context = self._load_stack_context()
 
-        # Check if real API key is available
-        # If not — use mock response (free development mode)
-        self.api_key = os.getenv("ANTHROPIC_API_KEY")
+        # Prefer injected key (e.g. from AWS SSM), fall back to env var
+        self.api_key = api_key or os.getenv("ANTHROPIC_API_KEY")
         self.use_mock = not self.api_key
 
         if self.use_mock:
@@ -154,7 +153,7 @@ Be specific to the stack provided. Not generic advice.
 Format your response clearly with sections."""
 
             message = client.messages.create(
-                model="claude-opus-4-20250514",
+                model="claude-opus-4-5",
                 max_tokens=1024,
                 messages=[{"role": "user", "content": prompt}]
             )
